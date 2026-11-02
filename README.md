@@ -1,19 +1,19 @@
-#SystemVerilog Two-Stage Pipeline
+# SystemVerilog Two-Stage Pipeline
 
-A beginner hardware simulation project implementing a 8-bit, 
+A beginner hardware simulation project implementing an 8-bit, 
 two-stage pipeline with synchronous reset and enable control. 
 
-##Behavior 
+## Behavior 
 - Reset clears both registers at the rising clock edge. 
 - Enable allows data to move through the pipeline. 
 - When reset and enable are low (0), both registers hold their values. 
 - Nonblocking assignments make stage2 capture the previous stage1 value. 
 
-##Verification 
+## Verification 
 A self-checking testbench checks reset, data transfers, and hold behavior. 
 The simulation passed using Icarus Verilog in WSL. 
 
-##Run 
+## Run 
 
 ```bash
 iverilog -g2012 -s pipeline_tb -o pipeline_sim pipeline_tb.sv
