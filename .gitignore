@@ -1,3 +1,8 @@
-pipeline_sim 
-*.vcd
+# Compiled simulation outputs
+simulation
+pipeline_sim
+*.vvp
 
+# Generated waveforms
+*.vcd
+*.fst
