@@ -40,12 +40,26 @@ module pipeline_tb;
 		if (stage1 !== 60 || stage2 !== 40)
 			$fatal(1, "Resume failed");
 
-		reset = 1;
+		
+                #2;
+                reset = 1;
+
+                //no rising edge yet
+                #1;
+                if (stage1 !== 60 || stage2 !== 40)
+			$fatal(1, "Reset cleared registers before rising edge"); 
+
+		//next rising edge
+		#3;
+		if (stage1 !== 0 || stage2 !== 0)
+			$fatal(1, "Synchronous reset failed");
+
 		enable = 1; 
 		data_in = 99; 
 		#10
 		if (stage1 !== 0 || stage2 !== 0) 
 			$fatal(1, "Reset priority failed"); 
+
 
 
 		$display("PASS: reset, transfer, hold, resume, and reset priority"); 
