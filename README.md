@@ -1,25 +1,50 @@
 # SystemVerilog Two-Stage Pipeline
 
-A beginner hardware simulation project implementing an 8-bit, 
-two-stage pipeline with synchronous reset and enable control. 
+An 8-bit, two-stage pipeline with synchronous reset and enable control,
+verified with a self-checking SystemVerilog testbench.
 
-## Behavior 
-- Reset clears both registers at the rising clock edge. 
-- Enable allows data to move through the pipeline. 
-- When reset and enable are low (0), both registers hold their values. 
-- Nonblocking assignments make stage2 capture the previous stage1 value. 
+## Files
 
-## Verification 
-A self-checking testbench checks reset, data transfers, and hold behavior. 
-The simulation passed using Icarus Verilog in WSL. 
+- `pipeline.sv` — pipeline module.
+- `pipeline_tb.sv` — clock generation, test inputs, and automated checks.
 
-## Run 
+## Behavior
+
+At each rising clock edge:
+
+- If reset is high, both stages clear to zero, regardless of enable.
+- Otherwise, if enable is high, stage1 captures data_in and stage2
+  captures the previous value of stage1.
+- Otherwise, both stages hold their values.
+
+Reset is synchronous: asserting reset between rising edges does not
+immediately clear the registers.
+
+## Verification
+
+The testbench checks:
+
+- Synchronous reset.
+- Data transfer through both stages.
+- Hold behavior when enable is low.
+- Resuming transfers after enable is restored.
+- Reset priority when reset and enable are both high.
+
+All checks passed using Icarus Verilog 12.0 in WSL.
+
+## Run
+
+From the folder containing both source files:
 
 ```bash
-iverilog -g2012 -s pipeline_tb -o pipeline_sim pipeline_tb.sv
-vvp pipeline_sim
+iverilog -g2012 -s pipeline_tb -o simulation pipeline.sv pipeline_tb.sv
+vvp simulation
 ```
-Expected output: 
+
+Expected success message:
+
 ```text
-PASS: reset, transfer, and hold
+PASS: reset, transfer, hold, resume, and reset priority
 ```
+
+A failed check stops the simulation with a descriptive error.
